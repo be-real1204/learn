@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LibSphere - MITRC</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{
+    margin:0;padding:0;box-sizing:border-box
+}
+body{
+    font-family:'Inter',sans-serif;background:#f6f5f7;display:flex
+}
+.sidebar{
+    width:240px;
+    background:#0f1a2e;
+    color:white;
+    position:fixed;
+    top:0;
+    left:0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    padding:24px 12px;
+    z-index:100
+}
+.brand{
+    padding:0 12px 24px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    margin-bottom:16px
+}
+.brand h1{
+    font-size:15px;
+    font-weight:700;
+}
+.brand p{
+    font-size:10px;
+    color:rgba(255,255,255,0.5);
+    letter-spacing:1px;
+    margin-top:4px}
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:8px;
+    color:rgba(255,255,255,0.6);
+    text-decoration:none;
+    font-size:13px;
+    margin-bottom:4px;
+    cursor:pointer;
+    transition:0.2s;
+    border:none;
+    background:transparent;
+    width:100%;
+    text-align:left
+}
+.nav-item:hover{
+    background:rgba(255,255,255,0.05);
+    color:white
+}
+.nav-item.active{
+    background:#1e3a8a;
+    color:white;
+    font-weight:500;
+}
+.nav-seperator{
+    height:1px;
+    background:rgba(255,255,255,0.1);
+    margin:16px 0;
+}
+.main-content{
+    margin-left:240px;
+    flex:1;
+    min-height:100vh
+}
+.header{
+    background:white;
+    border-bottom:1px solid #e2e8f0;
+    padding:20px 32px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+.content-area{
+    padding:32px;
+}
+/* Your old styles */
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    max-width:800px;
+    margin-bottom:24px;
+}
+.stat-card{
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:16px 20px;
+}
+.stat-number{
+    font-size:22px;
+    font-weight:700;
+}
+.stat-label{
+    font-size:12px;
+    color:#64748b;
+}
+.dashboard-layout{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+}
+.panel{
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    overflow:hidden;
+}
+.panel-header{
+    padding:20px;
+    border-bottom:1px solid #f1f5f9;
+}
+.book-row{
+    display:grid;
+    grid-template-columns:1.5fr 1fr auto auto;
+    align-items:center;
+    padding:16px 20px;
+    border-bottom:1px solid #f8fafc;
+    font-size:13px;
+    gap:10px;
+}
+.status-badge{
+    font-size:10px;
+    padding:4px 10px;
+    border-radius:20px;
+    font-weight:600;
+}
+.on-time{
+    background:#ecfdf5;
+    color:#059669
+}
+    .due-soon{
+        background:#fffbeb;
+        color:#d97706
+    }
+.btn{
+    height:28px;
+    padding:0 12px;
+    border-radius:20px;
+    border:none;
+    font-size:11px;
+    font-weight:600;
+    cursor:pointer;
+}
+.btn-renew{
+    background:#0f1a2e;
+    color:white;
+}
+.btn-return{
+    background:white;
+    border:1px solid #e2e8f0
+}
+.page{
+    display:none
+    }
+    .page.active{
+        display:block
+        }
+</style>
+</head>
+<body>
+
+<!-- FIXED SIDEBAR - NEVER REMOVES -->
+<aside class="sidebar">
+  <div class="brand"><h1>MITRC LibSphere</h1><p>Library Management</p></div>
+
+  <button onclick="showPage('dashboard')" id="nav-dashboard" class="nav-item active"><i class="fa-solid fa-table-columns"></i> Dashboard</button>
+  <button onclick="showPage('search')" id="nav-search" class="nav-item"><i class="fa-solid fa-magnifying-glass"></i> Search Books</button>
+  <button onclick="showPage('mybooks')" id="nav-mybooks" class="nav-item"><i class="fa-solid fa-book"></i> My Books (<span id="countMyBooks">3</span>)</button>
+  <button onclick="showPage('suggestions')" id="nav-suggestions" class="nav-item"><i class="fa-solid fa-lightbulb"></i> Suggestions</button>
+  <button onclick="showPage('notifications')" id="nav-notifications" class="nav-item"><i class="fa-solid fa-bell"></i> Notifications</button>
+
+  <div class="nav-seperator"></div>
+  <a href="login.html" class="nav-item" onclick="localStorage.clear()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+
+  <div style="margin-top:auto;padding:12px">
+    <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:12px;display:flex;gap:10px;align-items:center">
+      <div id="avatar" style="width:32px;height:32px;border-radius:50%;background:white;color:#0f1a2e;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">D</div>
+      <div><div id="userName" style="font-size:13px;font-weight:500">Student</div><div style="font-size:11px;color:rgba(255,255,255,0.5)">MITRC Alwar</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT AREA - ONLY THIS CHANGES -->
+<main class="main-content">
+  <header class="header">
+    <div><h2 id="pageTitle" style="font-size:18px;font-weight:700">Student Dashboard</h2><p id="pageSubtitle" style="font-size:11px;color:#64748b">Personalized library activity</p></div>
+    <div id="currentDate" style="font-size:12px;color:#64748b"></div>
+  </header>
+
+  <div class="content-area">
+
+    <!-- PAGE 1: DASHBOARD (Default) -->
+    <div id="page-dashboard" class="page active">
+      <h1 id="greeting" style="font-size:26px;font-weight:700">Good evening, student</h1>
+      <p style="font-size:13px;color:#64748b;margin-top:4px;margin-bottom:24px">Here's your library activity at a glance.</p>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-number" id="sBorrowed">3</div><div class="stat-label">Borrowed</div></div>
+        <div class="stat-card"><div class="stat-number" id="sDue">1</div><div class="stat-label">Due Soon</div></div>
+        <div class="stat-card"><div class="stat-number">0</div><div class="stat-label">Overdue</div></div>
+        <div class="stat-card"><div class="stat-number">2</div><div class="stat-label">Reservations</div></div>
+      </div>
+
+      <div class="dashboard-layout">
+        <div class="panel"><div class="panel-header"><h4>Currently Borrowed</h4></div><div id="bookList"></div></div>
+        <div class="panel"><div class="panel-header"><h4>Recommended for you</h4></div><div id="recList" style="padding:16px"></div></div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: SEARCH BOOKS -->
+    <div id="page-search" class="page">
+      <h1 style="font-size:26px;font-weight:700">Discover Books</h1>
+      <div style="margin-top:16px;display:flex;gap:12px"><input id="searchInput" oninput="searchCatalog(this.value)" placeholder="Search books, authors, ISBN..." style="flex:1;height:44px;padding:0 16px;border-radius:24px;border:1px solid #e2e8f0"><select style="height:44px;padding:0 16px;border-radius:24px;border:1px solid #e2e8f0"><option>All Category</option></select></div>
+      <div id="catalogGrid" style="margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px"></div>
+    </div>
+
+    <!-- PAGE 3: MY BOOKS -->
+    <div id="page-mybooks" class="page">
+      <h1 style="font-size:26px;font-weight:700">My Books</h1>
+      <div class="panel" style="margin-top:20px"><div id="myBooksFull"></div></div>
+    </div>
+
+    <!-- PAGE 4: SUGGESTIONS -->
+    <div id="page-suggestions" class="page">
+      <h1 style="font-size:26px;font-weight:700">Suggest a Book 💡</h1>
+      <p style="font-size:13px;color:#64748b;margin-top:6px">Community voted - Top books will be purchased</p>
+      <div class="panel" style="margin-top:20px;padding:20px">
+        <div style="display:flex;gap:12px"><input id="suggestInput" placeholder="Enter book title..." style="flex:1;height:44px;padding:0 16px;border-radius:12px;border:1px solid #e2e8f0;background:#f8fafc"><button onclick="addSuggestion()" style="height:44px;padding:0 20px;border-radius:12px;background:#0f1a2e;color:white;font-weight:600;border:none;cursor:pointer">Suggest + Vote</button></div>
+        <div id="suggestList" style="margin-top:16px"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 5: NOTIFICATIONS -->
+    <div id="page-notifications" class="page">
+      <h1 style="font-size:26px;font-weight:700">Notifications</h1>
+      <div class="panel" style="margin-top:20px;padding:20px">
+        <div style="padding:12px;background:#fffbeb;border-radius:12px;font-size:13px">⚠️ Computer Networks due in 1 day (02 Oct 2026)</div>
+        <div style="padding:12px;background:#ecfdf5;border-radius:12px;font-size:13px;margin-top:10px">✅ Your request for Clean Code approved!</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// ===== FIXED NAVBAR LOGIC - ONLY CONTENT CHANGES =====
+function showPage(pageName){
+  // 1. Hide all pages
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+
+  // 2. Show selected page
+  document.getElementById('page-'+pageName).classList.add('active');
+  document.getElementById('nav-'+pageName).classList.add('active');
+
+  // 3. Update header title
+  const titles = {dashboard:"Student Dashboard", search:"Search Catalogue", mybooks:"My Books", suggestions:"Community Suggestions", notifications:"Notifications"};
+  document.getElementById('pageTitle').innerText = titles[pageName];
+}
+
+// ===== YOUR EXISTING LOGIC (Same as before) =====
+const user = JSON.parse(localStorage.getItem('libsphere_user')||'{}');
+let books = JSON.parse(localStorage.getItem('my_books'))||[
+  {id:1,title:"Clean Code",date:"2026-09-30",status:"On time",rack:"CS-A-04"},
+  {id:2,title:"Computer Networks",date:"2026-09-29",status:"Due soon",rack:"CS-A-11"},
+  {id:3,title:"Machine Learning",date:"2026-10-10",status:"On time",rack:"AI-A-02"}
+];
+const catalog = [
+  {title:"Clean Code",author:"Robert Martin",avail:3,total:5,rack:"CS-A-04"},
+  {title:"Deep Learning",author:"Goodfellow",avail:2,total:2,rack:"AI-B-01"},
+  {title:"Computer Networks",author:"Tanenbaum",avail:5,total:7,rack:"CS-A-11"},
+  {title:"DBMS Concepts",author:"Korth",avail:4,total:6,rack:"CS-C-03"},
+  {title:"Python Crash Course",author:"Eric Matthes",avail:0,total:3,rack:"CS-B-02"}
+];
+let suggestions = [{title:"System Design Interview",votes:214},{title:"AI for Everyone",votes:89}];
+
+function init(){
+  if(user.name){
+    document.getElementById('greeting').innerText="Good evening, "+user.name.split(' ')[0];
+    document.getElementById('userName').innerText=user.name;
+    document.getElementById('avatar').innerText=user.name[0].toUpperCase();
+  }
+  document.getElementById('currentDate').innerText=new Date().toDateString();
+  renderBooks(); renderCatalog(catalog); renderSuggestions();
+}
+function renderBooks(){
+  document.getElementById('bookList').innerHTML=books.map(b=>`<div class="book-row"><div><b>${b.title}</b><div style="font-size:10px;color:#94a3b8">${b.rack}</div></div><div style="font-size:12px;color:#64748b">${b.date}</div><span class="status-badge ${b.status==='Due soon'?'due-soon':'on-time'}">${b.status}</span><div><button class="btn btn-renew" onclick="renew(${b.id})">Renew</button> <button class="btn btn-return" onclick="ret(${b.id})">Return</button></div></div>`).join('');
+  document.getElementById('myBooksFull').innerHTML=document.getElementById('bookList').innerHTML;
+  document.getElementById('countMyBooks').innerText=books.length;
+  document.getElementById('recList').innerHTML=`<div style="font-size:13px;font-weight:500">Hands-On ML<br><span style="font-size:11px;color:#64748b">87% match</span></div><div style="margin-top:12px;font-size:13px;font-weight:500">Database Concepts<br><span style="font-size:11px;color:#64748b">81% match</span></div>`;
+}
+function renderCatalog(list){
+  document.getElementById('catalogGrid').innerHTML=list.map(b=>`<div style="background:white;border:1px solid #e2e8f0;border-radius:16px;padding:16px"><div style="font-weight:600;font-size:13px">${b.title}</div><div style="font-size:11px;color:#64748b">${b.author}</div><div style="margin-top:8px;font-size:10px;padding:4px 8px;border-radius:12px;background:${b.avail>0?'#ecfdf5':'#fef2f2'};color:${b.avail>0?'#059669':'#dc2626'};display:inline-block;font-weight:700">${b.avail>0?'Available '+b.avail+'/'+b.total:'Not Available'}</div><div style="font-size:10px;color:#94a3b8;margin-top:6px">${b.rack}</div><button onclick="requestBook('${b.title}')" style="margin-top:12px;width:100%;height:32px;border-radius:12px;background:#0f1a2e;color:white;border:none;font-size:11px;font-weight:600;cursor:pointer">Request Book</button></div>`).join('');
+}
+function searchCatalog(q){ renderCatalog(catalog.filter(b=>(b.title+b.author).toLowerCase().includes(q.toLowerCase()))); }
+function requestBook(t){ alert("Request sent for: "+t); }
+function renew(id){ let b=books.find(x=>x.id===id); let d=new Date(b.date); d.setDate(d.getDate()+14); b.date=d.toISOString().split('T')[0]; localStorage.setItem('my_books',JSON.stringify(books)); renderBooks(); }
+function ret(id){ if(!confirm("Return?"))return; books=books.filter(x=>x.id!==id); localStorage.setItem('my_books',JSON.stringify(books)); renderBooks(); }
+function renderSuggestions(){ document.getElementById('suggestList').innerHTML=suggestions.map(s=>`<div style="display:flex;justify-content:space-between;padding:12px;background:#f8fafc;border-radius:12px;margin-top:8px;font-size:13px"><span>${s.title}</span><b>▲ ${s.votes}</b></div>`).join(''); }
+function addSuggestion(){ const v=document.getElementById('suggestInput').value.trim(); if(!v)return; suggestions.unshift({title:v,votes:1}); document.getElementById('suggestInput').value=''; renderSuggestions(); }
+init();
+</script>
+</body>
+</html>
