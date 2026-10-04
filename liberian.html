@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liberian Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+        }
+        body{
+            body{
+    font-family:'Inter',sans-serif;background:#f6f5f7;display:flex
+}
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="brand"><h1>MITRC LibSphere</h1><p>Library Management</p></div>
+<button onclick= "showPage('dashboard')"  id="nav-dashboard" class="nav-item active"><i class="fa-solid fa-table-columns"></i> Dashboard</button>
+<button onclick="showPage('managebooks')" id="nav-books" class="nav-item"><i class="fa-solid fa-book"></i>Manage Books</button>
+<button onclick="showPage('issuebooks')" id="nav-item"><i class="fa-solid fa-arrow-up-from-bracket"></i>Issue Books</button>
+<button onclick="showPage('returnbooks')" id="nav-item"><i class="fa-solid fa-arrow-down"></i>Return Books</button>
+<button onclick="showPage('manageusers')" id="nav-item"><i class="fa-solid fa-users"></i>Manage Users</button>
+<button onclick="showPage('Overdue')" id="nav-item"><i class="fa-solid fa-triangle-exclamation"></i>Overdue</button>
+<button onclick="showPage('suggestions')" id="nav-item"><i class="fa-regular fa-lightbulb"></i>suggestions and voting</button>
+<div class="nav-seperator"></div>
+  <a href="login.html" class="nav-item" onclick="localStorage.clear()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+<div class="profile"></div>
+
+    </aside>
+    
+</body>
+</html>
