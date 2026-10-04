@@ -28,6 +28,7 @@
             background-color: #172033;
             border-radius: 30px;
             margin-top: 20px;
+            box-shadow: #172033;
     
         }
         .box input{
@@ -120,7 +121,6 @@ box-shadow: 1px 3px 3px black;
             return;}
             const userData={name: name, email:mail, role:document.getElementById('role').value, branch:document.getElementById('branch').value};
             localStorage.setItem('libsphere_user',JSON.stringify(userData));
-           
             if(userData.role=='student')
             window.location.href="user.html";
          if(userData.role==='Liberian')
