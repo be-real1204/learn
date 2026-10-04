@@ -120,12 +120,13 @@ box-shadow: 1px 3px 3px black;
             return;}
             const userData={name: name, email:mail, role:document.getElementById('role').value, branch:document.getElementById('branch').value};
             localStorage.setItem('libsphere_user',JSON.stringify(userData));
-            if(userData.role==='librarian')
-             window.location.href="librarian.html";
+           
             if(userData.role=='student')
             window.location.href="user.html";
-        else
-        window.location.href="department.html";
+         if(userData.role==='Liberian')
+             window.location.href="liberian.html";
+        // else
+        // window.location.href="department.html";
         }
     </script>
     
