@@ -1,4 +1,4 @@
-# MITRC LibSphere – Library Management System
+# MITRC LibSphere – Library Management System (FRONTEND)
 
 ## 📚 About the Project
 
